@@ -3,6 +3,7 @@
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 import sys
+import os
 
 
 class PyTest(TestCommand):
@@ -20,13 +21,17 @@ class PyTest(TestCommand):
 
 def readme():
     with open('README.rst') as f:
-        return f.read()
+        return f.read()    
 
-
+    
 def requirements():
     with open('requirements.txt') as f:
         return map(lambda x: x.strip(), f.readlines())
 
+    
+def listdir_fullpath(d):
+    return [os.path.join(d, f) for f in os.listdir(d)]    
+    
 setup(name='hmda_tools',
       version='0.1.3',
       description='Tools to make working with HMDA data easier.',
@@ -39,6 +44,9 @@ setup(name='hmda_tools',
         'hmda_tools',
         'hmda_tools.data',
       ],
+      data_files=[
+         ('code_sheets', listdir_fullpath('hmda_tools/data/code_sheet_data'))
+         ],
       install_requires=requirements(),
       scripts=[
         'bin/hmda_create_schemas',
