@@ -1,5 +1,10 @@
 import os, tempfile
+import pkgutil
 import requests
+
+
+def get_resource(file):
+    return pkgutil.get_data(__name__, file)
 
 
 def download_file(uri):

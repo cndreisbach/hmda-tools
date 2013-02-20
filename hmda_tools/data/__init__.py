@@ -7,8 +7,8 @@ from sqlalchemy import MetaData, create_engine
 import sqlsoup
 
 from . import schemas
-
-
+from .. import get_resource
+     
 def csv_row_to_dict(headers, row):
     return dict(zip(headers, map(string.strip, row)))
 
@@ -64,14 +64,12 @@ def load_code_sheet(db_uri):
     for table_name in tables:
         table = db.entity(table_name)
         table.delete()
-        filename = os.path.join(os.path.dirname(__file__),
-                                "code_sheet_data/%s.csv" % table_name)
-        with open(filename, 'rb') as csvfile:
-            reader = csv.reader(csvfile)
-            headers = map(string.strip, reader.next())
-            for row in reader:
-                row = csv_row_to_dict(headers, row)
-                table.insert(**row)
+        csv_data = get_resource("code_sheets/%s.csv" % table_name).strip().split("\n")
+        reader = csv.reader(csv_data)
+        headers = map(string.strip, reader.next())
+        for row in reader:
+            row = csv_row_to_dict(headers, row)
+            table.insert(**row)
 
         db.commit()
 

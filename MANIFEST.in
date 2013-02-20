@@ -3,4 +3,3 @@ include TERMS.txt
 include CHANGELOG.txt
 include requirements.txt
 include docs/*
-include hmda_tools/data/code_sheet_data/*
